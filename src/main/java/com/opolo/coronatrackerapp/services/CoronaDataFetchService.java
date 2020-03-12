@@ -57,6 +57,21 @@ public class CoronaDataFetchService {
 
                     diffFromPrevious = lastRecord - secondLastRecord;
 
+                }else if(!StringUtils.hasText(record.get(record.size() - 1)) && 
+                    StringUtils.hasText(record.get(record.size() - 2))){
+
+                    diffFromPrevious = 0;
+
+                }else if(StringUtils.hasText(record.get(record.size() - 1)) && 
+                    !StringUtils.hasText(record.get(record.size() - 2))){
+
+                    diffFromPrevious = 0;
+                    lastRecord = Integer.parseInt(record.get(record.size() - 1));
+
+                }else{
+
+                    diffFromPrevious = 0;
+
                 }
 
                 /* System.out.println(" Last record - "+Integer.parseInt(record.get(record.size() - 1)));
