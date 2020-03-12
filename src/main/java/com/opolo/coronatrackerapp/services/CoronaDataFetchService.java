@@ -17,6 +17,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class CoronaDataFetchService {
@@ -29,43 +30,59 @@ public class CoronaDataFetchService {
     @Scheduled(cron = "* * 1 * * *")
     public void fetchData() throws IOException, InterruptedException {
 
+        int diffFromPrevious = 0, lastRecord = 0, secondLastRecord = 0;
         CovidTrackerModel covidTrackerObj;
         final List<CovidTrackerModel> localGeoCovidDataList = new ArrayList<CovidTrackerModel>();
 
-        final HttpClient client = HttpClient.newHttpClient();
-        final HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(datatURL)).build();
+        try {
 
-        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-       
-        final StringReader csvReader = new StringReader(response.body());
-        
-        final Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(csvReader);
+            final HttpClient client = HttpClient.newHttpClient();
+            final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(datatURL)).build();
 
-    
-        for (final CSVRecord record : records) {
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            covidTrackerObj = new CovidTrackerModel();
+            final StringReader csvReader = new StringReader(response.body());
 
-            int diffFromPrevious = Integer.parseInt(record.get(record.size() - 1)) - 
-            Integer.parseInt(record.get(record.size() - 2));
+            final Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(csvReader);
 
-            String stateName = record.get("Province/State").equals("") ? "<Country-wide-data>" : 
-            record.get("Province/State");
-            
-            covidTrackerObj.setState(stateName);
-            covidTrackerObj.setCountry(record.get("Country/Region"));
-            covidTrackerObj.setLatestTotalCases(Integer.parseInt(record.get(record.size() - 1)));
-            covidTrackerObj.setDiffFromPrevious(diffFromPrevious);
+            for (final CSVRecord record : records) {
 
-            System.out.println(covidTrackerObj);
-            localGeoCovidDataList.add(covidTrackerObj);
-            
+                covidTrackerObj = new CovidTrackerModel();
+
+                if(StringUtils.hasText(record.get(record.size() - 1)) && 
+                    StringUtils.hasText(record.get(record.size() - 2))){
+
+                    lastRecord = Integer.parseInt(record.get(record.size() - 1));
+                    secondLastRecord = Integer.parseInt(record.get(record.size() - 2));
+
+                    diffFromPrevious = lastRecord - secondLastRecord;
+
+                }
+
+                /* System.out.println(" Last record - "+Integer.parseInt(record.get(record.size() - 1)));
+                System.out.println(" Second Last record - "+Integer.parseInt(record.get(record.size() - 2))); */
+
+                String stateName = record.get("Province/State").equals("") ? "<Country-wide-data>"
+                        : record.get("Province/State");
+
+                covidTrackerObj.setState(stateName);
+                covidTrackerObj.setCountry(record.get("Country/Region"));
+                covidTrackerObj.setLatestTotalCases(lastRecord);
+                covidTrackerObj.setDiffFromPrevious(diffFromPrevious);
+
+                //System.out.println(covidTrackerObj);
+                localGeoCovidDataList.add(covidTrackerObj);
+
+            }
+
+            this.geoCovidDataList = localGeoCovidDataList;
+
+            csvReader.close();
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-
-        this.geoCovidDataList = localGeoCovidDataList;
-         
-        csvReader.close();
+        
     }
 
     public List<CovidTrackerModel> getGeoCovidDataList() {

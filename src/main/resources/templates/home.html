@@ -17,10 +17,17 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
     />
+
+    <link rel="stylesheet" href="css/covidStyles.css" />
   </head>
 
   <body>
+    
+    <!-- <img class="bg" src="../static/images/map-of-the-world.jpg" th:src="@{images/map-of-the-world.jpg}"/> -->
+    <!-- <div class="bg"></div> -->
+
     <div class="container">
+
       <h1>Coronavirus Global Tracker</h1>
 
       <div class="jumbotron">
@@ -31,26 +38,27 @@
           <span>New cases reported since previous day:</span>
           <span th:text="${newCasesSincePrevious}"></span>
         </p>
+        <p id="datasource-text"><cite title="Source Title">**Source: CSSE at Johns Hopkins University</cite></p>
       </div>
       <div class="table-responsive">
         <table
           id="covidDataTable"
-          class="table table-striped table-bordered table-sm"
+          class="table table-striped table-bordered"
           cellspacing="0"
           width="100%"
         >
           <thead>
             <tr>
-              <th class="th-sm">State</th>
               <th class="th-sm">Country</th>
+              <th class="th-sm">State</th>
               <th class="th-sm">Total cases reported</th>
               <th class="th-sm">Changes since last day</th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="geoCovidStat : ${geoCovidStats}">
-              <td th:text="${geoCovidStat.state}"></td>
               <td th:text="${geoCovidStat.country}"></td>
+              <td th:text="${geoCovidStat.state}"></td>
               <td th:text="${geoCovidStat.latestTotalCases}">0</td>
               <td th:text="${geoCovidStat.diffFromPrevious}">0</td>
             </tr>
