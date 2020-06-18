@@ -1,3 +1,7 @@
+Auto deploy from Github repo (https://github.com/sidb91/covid19-tracker-springboot) enabled in Heroku.
+
+Heroku deploy instructions:
+
 Install the Heroku CLI
 Download and install the Heroku CLI.
 
