@@ -59,7 +59,7 @@ public class CovidRecovTrackerModel {
 
     @Override
     public String toString() {
-        return "CovidDeathTrackerModel [country=" + country + ", diffFromPrevious=" + diffFromPrevious
+        return "CovidRecovTrackerModel [country=" + country + ", diffFromPrevious=" + diffFromPrevious
                 + ", latestTotalCases=" + latestTotalCases + ", latitude=" + latitude + ", longitude=" + longitude
                 + ", state=" + state + "]";
     }

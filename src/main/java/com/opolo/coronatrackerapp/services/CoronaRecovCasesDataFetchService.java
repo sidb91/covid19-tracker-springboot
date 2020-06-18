@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class CoronaRecovCasesDataFetchService{
 
-private static final String DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv";
+private static final String DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
     // fetch external timeseries covid confirmed recovered cases data...
     @PostConstruct

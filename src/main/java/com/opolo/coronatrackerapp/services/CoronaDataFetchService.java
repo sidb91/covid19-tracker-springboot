@@ -27,7 +27,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class CoronaDataFetchService {
 
-    private static final String datatURL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
+    private static final String datatURL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 
     private List<CovidTrackerModel> geoCovidDataList = new ArrayList<CovidTrackerModel>();
 
@@ -106,17 +106,27 @@ public class CoronaDataFetchService {
                 //accumulate death cases timeseries data from map...
                 String searchDeathKey = countryName.concat(stateName);
                 CovidDeathTrackerModel covidDeathTrackerObj = countryWiseDeathMap.get(searchDeathKey);
-                int totalDeathPerCountry = covidDeathTrackerObj.getLatestTotalCases();
-                int diffInDeathPerCountry = covidDeathTrackerObj.getDiffFromPrevious();
 
+                int totalDeathPerCountry=0;
+                int diffInDeathPerCountry=0;
+
+                if(covidDeathTrackerObj != null){
+                    totalDeathPerCountry = covidDeathTrackerObj.getLatestTotalCases();
+                    diffInDeathPerCountry = covidDeathTrackerObj.getDiffFromPrevious();
+                }
 
                 //accumulate recovered cases timeseries data from map...
                 String searchRecovKey = countryName.concat(stateName);
                 CovidRecovTrackerModel covidRecovTrackerObj = countryWiseRecovMap.get(searchRecovKey);
-                int totalRecovPerCountry = covidRecovTrackerObj.getLatestTotalCases();
-                int diffInRecovPerCountry = covidRecovTrackerObj.getDiffFromPrevious();
 
+                int totalRecovPerCountry=0;
+                int diffInRecovPerCountry=0;
 
+                if(covidRecovTrackerObj != null){
+                    totalRecovPerCountry = covidRecovTrackerObj.getLatestTotalCases();
+                    diffInRecovPerCountry = covidRecovTrackerObj.getDiffFromPrevious();
+                }
+                
                 covidTrackerObj.setState(stateName);
                 covidTrackerObj.setCountry(countryName);
                 covidTrackerObj.setLatitude(latitude);

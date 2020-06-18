@@ -23,7 +23,7 @@ public class CoronaDeathCaseService {
 
     
     private static final String datatURL = 
-    "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv";
+    "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
 
     // fetch external timeseries covid confirmed death cases data...
     @PostConstruct
