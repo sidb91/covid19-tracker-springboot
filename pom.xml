@@ -5,7 +5,7 @@
 	<groupId>com.opolo</groupId>
 	<artifactId>corona-tracker-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>Corona Cases Tracker</name>
 	<description>Boot app for Corona Cases Tracker</description>
